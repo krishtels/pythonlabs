@@ -1,0 +1,99 @@
+[__type__]
+"<class 'str'>" = "function"
+
+[__name__]
+"<class 'str'>" = "g"
+
+[__globals__.d]
+"<class 'int'>" = 4
+
+[__args__.co_argcount]
+"<class 'int'>" = 0
+
+[__args__.co_cellvars]
+"<class 'list'>" = []
+
+[__args__.co_code]
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 116
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 0
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 116
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 1
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 131
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 1
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 1
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 0
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 100
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 0
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 83
+
+[[__args__.co_code."<class 'list'>"]]
+"<class 'int'>" = 0
+
+[__args__.co_consts]
+[[__args__.co_consts."<class 'list'>"]]
+None = "None"
+
+[__args__.co_filename]
+"<class 'str'>" = "/home/karina/labs/python/Lab1/lab2/main.py"
+
+[__args__.co_firstlineno]
+"<class 'int'>" = 9
+
+[__args__.co_flags]
+"<class 'int'>" = 67
+
+[__args__.co_freevars]
+"<class 'list'>" = []
+
+[__args__.co_kwonlyargcount]
+"<class 'int'>" = 0
+
+[__args__.co_lnotab]
+[[__args__.co_lnotab."<class 'list'>"]]
+"<class 'int'>" = 0
+
+[[__args__.co_lnotab."<class 'list'>"]]
+"<class 'int'>" = 1
+
+[__args__.co_name]
+"<class 'str'>" = "g"
+
+[__args__.co_names]
+[[__args__.co_names."<class 'list'>"]]
+"<class 'str'>" = "print"
+
+[[__args__.co_names."<class 'list'>"]]
+"<class 'str'>" = "d"
+
+[__args__.co_nlocals]
+"<class 'int'>" = 0
+
+[__args__.co_posonlyargcount]
+"<class 'int'>" = 0
+
+[__args__.co_stacksize]
+"<class 'int'>" = 2
+
+[__args__.co_varnames]
+"<class 'list'>" = []

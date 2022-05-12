@@ -18,5 +18,4 @@ class Yaml:
 
     @staticmethod
     def load(file):
-        with open(file, 'r') as f:
-            return Yaml.loads(f.read())
+        return Yaml.loads(file.read())

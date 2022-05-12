@@ -18,11 +18,5 @@ class Toml:
 
     @staticmethod
     def load(file):
-        with open(file, 'r') as f:
-            return Toml.loads(f.read())
-
-
-
-
-
+        return Toml.loads(file.read())
 

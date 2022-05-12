@@ -91,8 +91,7 @@ class Json:
         return deconvert(self._deserialize_from_str(s))
 
     def load(self, file):
-        with open(file, 'r') as f:
-            return self.loads(f.read())
+        return self.loads(file.read())
 
     def _deserialize_from_str(self, string):
         self._current_position = string.find('"type":', self._current_position)
