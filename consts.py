@@ -1,7 +1,0 @@
-SIGNS_END_OF_SENTENCE = ['?', '!']
-N = 10
-K = 4
-
-MR_CONST = 'Mr.'
-MRS_CONST = 'Mrs.'
-ABBRS = [MR_CONST, MRS_CONST]
