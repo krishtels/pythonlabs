@@ -1,7 +1,7 @@
 import inspect
 import builtins
 import types
-from consts import PRIMITIVES
+from serializer.consts import PRIMITIVES
 from types import FunctionType, BuiltinFunctionType, LambdaType, CodeType, GetSetDescriptorType, MappingProxyType, \
     MethodDescriptorType, WrapperDescriptorType
 

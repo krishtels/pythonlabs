@@ -1,5 +1,5 @@
-from packing_tool import convert, deconvert
-from consts import PRIMITIVES
+from serializer.packing_tool import convert, deconvert
+from serializer.consts import PRIMITIVES
 
 
 class Json:
