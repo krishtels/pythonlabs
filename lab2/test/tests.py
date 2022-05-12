@@ -368,7 +368,7 @@ class SerializerTest(unittest.TestCase):
         with open("/home/karina/labs/python/Lab1/lab2/test/test.yaml", "r") as f:
             new_obj = factory.load(f)
         old_obj = test_value.g
-        factory.dump(old_obj, "new.yaml")
+        factory.dump(old_obj, "test/new.yaml")
         self.assertEqual(old_obj(), new_obj())
 
     def test_toml_from_file(self):
@@ -376,7 +376,7 @@ class SerializerTest(unittest.TestCase):
         with open("/home/karina/labs/python/Lab1/lab2/test/test.toml", "r") as f:
             new_obj = factory.load(f)
         old_obj = test_value.g
-        factory.dump(old_obj, "new.toml")
+        factory.dump(old_obj, "test/new.toml")
         self.assertEqual(old_obj(), new_obj())
 
     def test_json_from_file(self):
@@ -384,10 +384,8 @@ class SerializerTest(unittest.TestCase):
         with open("/home/karina/labs/python/Lab1/lab2/test/test.json", "r") as f:
             new_obj = factory.load(f)
         old_obj = test_value.g
-        factory.dump(old_obj, "new.json")
+        factory.dump(old_obj, "test/new.json")
         self.assertEqual(old_obj(), new_obj())
-
-
 
 
 if __name__ == '__main__':
