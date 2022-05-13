@@ -9,8 +9,7 @@ class Toml:
 
     @staticmethod
     def dump(obj, file):
-        with open(file, 'w+') as f:
-            f.write(Toml.dumps(obj))
+        file.write(Toml.dumps(obj))
 
     @staticmethod
     def loads(s):

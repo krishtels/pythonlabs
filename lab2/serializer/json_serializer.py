@@ -11,8 +11,7 @@ class Json:
         return self._serialize_to_str(convert(obj))
 
     def dump(self, obj, file):
-        with open(file, 'w+') as f:
-            f.write(self.dumps(obj))
+        file.write(self.dumps(obj))
 
     def _serialize_to_str(self, object):
         if isinstance(object, PRIMITIVES):

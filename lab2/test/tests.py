@@ -365,26 +365,29 @@ class SerializerTest(unittest.TestCase):
 
     def test_yaml_from_file(self):
         factory = Factory.create_serializer('.yaml')
-        with open("/home/karina/labs/python/Lab1/lab2/test/test.yaml", "r") as f:
+        with open("./test/test.yaml", "r") as f:
             new_obj = factory.load(f)
         old_obj = test_value.g
-        factory.dump(old_obj, "test/new.yaml")
+        with open("test/new.yaml", "w") as output_file:
+            factory.dump(object, output_file)
         self.assertEqual(old_obj(), new_obj())
 
     def test_toml_from_file(self):
         factory = Factory.create_serializer('.toml')
-        with open("/home/karina/labs/python/Lab1/lab2/test/test.toml", "r") as f:
+        with open("./test/test.toml", "r") as f:
             new_obj = factory.load(f)
         old_obj = test_value.g
-        factory.dump(old_obj, "test/new.toml")
+        with open("test/new.toml", "w") as output_file:
+            factory.dump(object, output_file)
         self.assertEqual(old_obj(), new_obj())
 
     def test_json_from_file(self):
         factory = Factory.create_serializer('.json')
-        with open("/home/karina/labs/python/Lab1/lab2/test/test.json", "r") as f:
+        with open("./test/test.json", "r") as f:
             new_obj = factory.load(f)
         old_obj = test_value.g
-        factory.dump(old_obj, "test/new.json")
+        with open("test/new.json", "w") as output_file:
+            factory.dump(object, output_file)
         self.assertEqual(old_obj(), new_obj())
 
 

@@ -8,7 +8,7 @@
     }: 
     {
     "type": "str"
-    "value": "function"
+    "value": "class"
     }, 
 
     {
@@ -17,253 +17,30 @@
     }: 
     {
     "type": "str"
-    "value": "g"
+    "value": "object"
     }, 
 
     {
     "type": "str"
-    "value": "__globals__"
+    "value": "__doc__"
     }: 
     {
-    "type": "dict"
-    "value": {
-        {
-        "type": "str"
-        "value": "d"
-        }: 
-        {
-        "type": "int"
-        "value": 4
-        }
-        }
+    "type": "str"
+    "value": "The base class of the class hierarchy.
+
+When called, it accepts no arguments and returns a new featureless
+instance that has no instance attributes and cannot be given any.
+"
     }, 
 
     {
     "type": "str"
-    "value": "__args__"
+    "value": "__bases__"
     }: 
     {
-    "type": "dict"
-    "value": {
-        {
-        "type": "str"
-        "value": "co_argcount"
-        }: 
-        {
-        "type": "int"
-        "value": 0
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_cellvars"
-        }: 
-        {
-        "type": "list"
-        "value": [
-        ]
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_code"
-        }: 
-        {
-        "type": "list"
-        "value": [
-            {
-            "type": "int"
-            "value": 116
-            },
-            {
-            "type": "int"
-            "value": 0
-            },
-            {
-            "type": "int"
-            "value": 116
-            },
-            {
-            "type": "int"
-            "value": 1
-            },
-            {
-            "type": "int"
-            "value": 131
-            },
-            {
-            "type": "int"
-            "value": 1
-            },
-            {
-            "type": "int"
-            "value": 1
-            },
-            {
-            "type": "int"
-            "value": 0
-            },
-            {
-            "type": "int"
-            "value": 100
-            },
-            {
-            "type": "int"
-            "value": 0
-            },
-            {
-            "type": "int"
-            "value": 83
-            },
-            {
-            "type": "int"
-            "value": 0
-            }
-        ]
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_consts"
-        }: 
-        {
-        "type": "list"
-        "value": [
-            {
-            "type": "NoneType"
-            "value": null
-            }
-        ]
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_filename"
-        }: 
-        {
-        "type": "str"
-        "value": "/home/karina/labs/python/Lab1/lab2/test/test_value.py"
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_firstlineno"
-        }: 
-        {
-        "type": "int"
-        "value": 32
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_flags"
-        }: 
-        {
-        "type": "int"
-        "value": 67
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_freevars"
-        }: 
-        {
-        "type": "list"
-        "value": [
-        ]
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_kwonlyargcount"
-        }: 
-        {
-        "type": "int"
-        "value": 0
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_lnotab"
-        }: 
-        {
-        "type": "list"
-        "value": [
-            {
-            "type": "int"
-            "value": 0
-            },
-            {
-            "type": "int"
-            "value": 1
-            }
-        ]
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_name"
-        }: 
-        {
-        "type": "str"
-        "value": "g"
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_names"
-        }: 
-        {
-        "type": "list"
-        "value": [
-            {
-            "type": "str"
-            "value": "print"
-            },
-            {
-            "type": "str"
-            "value": "d"
-            }
-        ]
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_nlocals"
-        }: 
-        {
-        "type": "int"
-        "value": 0
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_posonlyargcount"
-        }: 
-        {
-        "type": "int"
-        "value": 0
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_stacksize"
-        }: 
-        {
-        "type": "int"
-        "value": 2
-        }, 
-
-        {
-        "type": "str"
-        "value": "co_varnames"
-        }: 
-        {
-        "type": "list"
-        "value": [
-        ]
-        }
-        }
+    "type": "list"
+    "value": [
+    ]
     }
     }
 }

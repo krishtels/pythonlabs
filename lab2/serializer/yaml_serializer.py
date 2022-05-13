@@ -9,8 +9,7 @@ class Yaml:
 
     @staticmethod
     def dump(obj, file):
-        with open(file, 'w+') as f:
-            f.write(Yaml.dumps(obj))
+        file.write(Yaml.dumps(obj))
 
     @staticmethod
     def loads(s):
