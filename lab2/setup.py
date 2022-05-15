@@ -9,5 +9,4 @@ setup(
     author_email="karina.krishtafovich@email.com",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=["yaml", "toml"]
 )
