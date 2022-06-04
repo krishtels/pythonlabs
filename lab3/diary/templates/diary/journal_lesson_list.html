@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load filters %}
+
+{% block title %}Журнал группы {{ group }} {% endblock %}
+
+{% block content %}
+    <h1>Журнал группы - {{ group }} - {{ lesson }}</h1>
+
+    <form action="{% url 'score_lesson' group.id lesson.id %}" method="get">
+        <label> С
+            <input class="input-date" name="start-date" type="date" value="{{ date_period|first|date:"Y-m-d" }}" >
+        </label>
+        <label> по
+            <input class="input-date" name="end-date" type="date" value="{{ date_period|last|date:"Y-m-d" }}">
+        </label>
+        <button class="btn-filter btn-filter-purple" type="submit">Применить</button>
+    </form>
+
+    <p></p>
+    <table id="testTable" class="table-journal">
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                 {% for date in date_period %}
+                     <th>{{ date|date:"d.m.Y" }}</th>
+                 {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for student in students %}
+            <tr>
+                <td><a href="{{ student.student.get_absolute_url }}">{{ student.get_full_name }}</a></td>
+                {% for date in date_period %}
+                    {% with score_id_tuple=scores_dict|get_dict_value:date|get_dict_value:student.id %}
+                        <td>
+
+                            {% if score_id_tuple|get_list_value:0 == 0 %}
+                                <a ondblclick="showSelectBox()" href="#"
+                                   data-student="{{ student.id }}"
+                                   data-scoredate="{{ date|date:"Y-m-d" }}"
+                                   data-scoreid="{{ score_id_tuple|get_list_value:1 }}">--</a>
+                            {% else %}
+                                <a ondblclick="showSelectBox()" href="#"
+                                   data-student="{{ student.id }}"
+                                   data-scoredate="{{ date|date:"Y-m-d" }}"
+                                   data-scoreid="{{ score_id_tuple|get_list_value:1 }}">{{ score_id_tuple|get_list_value:0 }}</a>
+                            {% endif %}
+
+                        </td>
+                    {% endwith %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+
+    </tbody>
+    </table>
+
+
+{% endblock %}
