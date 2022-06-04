@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.urls import reverse_lazy
-from Lab3.settings import GENDER_CHOICES, USER_STATUS_CHOICES, SCORE_CHOICES, STUDENT, TEACHER, AUTH_USER_MODEL
+from Lab3.settings import GENDER_CHOICES, USER_STATUS_CHOICES, MARK_CHOICES, STUDENT, TEACHER, AUTH_USER_MODEL
 
 
 class User(AbstractUser):
@@ -93,20 +93,20 @@ class RatingItemStatus(models.Model):
 class Journal(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Наименование класса')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Предмет')
-    student = models.ForeignKey(AUTH_USER_MODEL, related_name='score_student', on_delete=models.CASCADE,
+    student = models.ForeignKey(AUTH_USER_MODEL, related_name='mark_student', on_delete=models.CASCADE,
                                 limit_choices_to={'user_status': STUDENT}, verbose_name='Студент')
-    teacher = models.ForeignKey(AUTH_USER_MODEL, related_name='score_teacher', on_delete=models.SET_NULL,
+    teacher = models.ForeignKey(AUTH_USER_MODEL, related_name='mark_teacher', on_delete=models.SET_NULL,
                                 null=True, limit_choices_to={'user_status': TEACHER}, verbose_name='Учитель')
 
-    score = models.SmallIntegerField(choices=SCORE_CHOICES, verbose_name='Оценка')
-    score_status = models.ForeignKey(RatingItemStatus, on_delete=models.CASCADE, verbose_name='Статус оценки')
+    mark = models.SmallIntegerField(choices=MARK_CHOICES, verbose_name='Оценка')
+    mark_status = models.ForeignKey(RatingItemStatus, on_delete=models.CASCADE, verbose_name='Статус оценки')
     created = models.DateField(verbose_name='Дата создания')
 
     def __str__(self):
         return str(self.score)
 
     def get_absolute_url(self):
-        return reverse_lazy('score_detail', kwargs={'pk': self.pk})
+        return reverse_lazy('journal_detail', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'запись журнала'
