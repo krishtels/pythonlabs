@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load filters %}
-
+{% load static %}
 {% block title %}Журнал группы {{ group }} {% endblock %}
 
 {% block content %}
@@ -36,15 +36,9 @@
                         <td>
 
                             {% if score_id_tuple|get_list_value:0 == 0 %}
-                                <a ondblclick="showSelectBox()" href="#"
-                                   data-student="{{ student.id }}"
-                                   data-scoredate="{{ date|date:"Y-m-d" }}"
-                                   data-scoreid="{{ score_id_tuple|get_list_value:1 }}">--</a>
+                                <p>--</p>
                             {% else %}
-                                <a ondblclick="showSelectBox()" href="#"
-                                   data-student="{{ student.id }}"
-                                   data-scoredate="{{ date|date:"Y-m-d" }}"
-                                   data-scoreid="{{ score_id_tuple|get_list_value:1 }}">{{ score_id_tuple|get_list_value:0 }}</a>
+                                <p>{{ score_id_tuple|get_list_value:0 }}</p>
                             {% endif %}
 
                         </td>
@@ -52,7 +46,7 @@
                 {% endfor %}
             </tr>
         {% endfor %}
-
+        <a class="btn btn-success" href="{% url 'add_score' group.id lesson.id %}">+ Добавить оценку</a>
     </tbody>
     </table>
 

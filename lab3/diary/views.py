@@ -1,12 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import DetailView, ListView
 
+from diary.forms import ScoreCreateForm
 from diary.models import Group, Lesson, Score
 from diary.permissions import ScoreJournalMixin
 from lab3.settings import TEACHER
-from people.models import User
+from people.models import User, Teacher
 from people.permissions import TeacherPermissionsMixin, TeacherLessonPermissionsMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 
 
 class GroupStudentListView(LoginRequiredMixin, TeacherPermissionsMixin, ListView):
@@ -35,10 +38,6 @@ class ScoreLessonListView(LoginRequiredMixin, TeacherLessonPermissionsMixin, Sco
     context_object_name = 'scores'
     permission_denied_message = 'В доступе отказанно'
 
-    def __init__(self):
-        self.group = None
-        self.lesson = None
-
     def get_queryset(self):
         group_student = Group.objects.all()
         self.group = get_object_or_404(group_student, id=self.kwargs['group_id'])
@@ -64,25 +63,59 @@ class ScoreLessonListView(LoginRequiredMixin, TeacherLessonPermissionsMixin, Sco
         return context
 
 
-# class AddScore(LoginRequiredMixin, TeacherLessonPermissionsMixin, View):
-#     """Добавление оценки."""
-#     def post(self, request):
-#         score_id = request.POST.get('score_id')
-#         if score_id == '0':
-#             score_id = None
-#         score_params = {
-#             'score': request.POST.get('score_value'),
-#             'group_id': request.POST.get('group'),
-#             'lesson_id': request.POST.get('lesson'),
-#             'student_id': request.POST.get('student'),
-#             'teacher_id': request.POST.get('teacher'),
-#             'score_status_id': request.POST.get('score_status'),
-#             'created': request.POST.get('score_date'),
-#         }
-#
-#         if score_params['score']:
-#             Score.objects.update_or_create(id=score_id, defaults=score_params)
-#             return JsonResponse({'status': 'ok'})
-#         else:
-#             Score.objects.get(id=score_id).delete()
-#             return JsonResponse({'status': 'ok'})
+class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
+    template_name = 'diary/score_create.html'
+    success_url = reverse_lazy('score_lesson')
+    success_message = 'Оценка успешно добавлена.'
+    form_class = ScoreCreateForm
+
+    def get(self, request, *args, **kwargs):
+        u = self.request.path.split('/')
+        group = Group.objects.get(id=u[-4])
+        form = ScoreCreateForm(group)
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+
+        return render(request, "diary/score_create.html", context=context)
+
+    def post(self, request, *args, **kwargs):
+        u = self.request.path.split('/')
+        group = Group.objects.get(id=u[-4])
+        form = self.form_class(group, request.POST)
+        context = self.get_context_data(**kwargs)
+
+        if form.is_valid():
+            score = form.save(commit=False)
+            mark = score.score
+
+            score = Score.objects.get_or_create(
+                student=score.student,
+                lesson=Lesson.objects.get(id=u[-3]),
+                created=score.created
+            )[0]
+            score.group = Group.objects.get(id=u[-4])
+            score.teacher = User.objects.get(id=request.user.id)
+            score.score = mark
+            score.save()
+
+            return redirect(reverse_lazy("score_lesson", kwargs={
+                'group_id': score.group.pk,
+                'lesson_id': score.lesson.pk
+            }))
+        else:
+            return render(request, "diary/score_create.html", context={
+                'form': form,
+                **context
+        })
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        u = self.request.path.split('/')
+        lesson = Lesson.objects.get(id=u[-3])
+        group = Group.objects.get(id=u[-4])
+        teacher = Teacher.objects.filter(user_id=self.request.user.id)
+        context['lesson'] = lesson
+        context['group'] = group
+        context['teacher'] = teacher
+        return context
+

@@ -33,17 +33,6 @@ class Group(models.Model):
         verbose_name_plural = 'Список групп'
 
 
-class RatingItemStatus(models.Model):
-    name = models.CharField('Статус оценки', max_length=15)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Cтатус оценки'
-        verbose_name_plural = 'Список статусов оценок'
-
-
 class Score(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Наименование группы')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Предмет')
@@ -52,7 +41,6 @@ class Score(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='score_teacher', on_delete=models.SET_NULL,
                                 null=True, limit_choices_to={'user_status': TEACHER}, verbose_name='Учитель')
     score = models.SmallIntegerField(choices=SCORE_CHOICES, verbose_name='Оценка')
-    score_status = models.ForeignKey(RatingItemStatus, on_delete=models.CASCADE, verbose_name='Статус оценки')
     created = models.DateField(verbose_name='Дата создания')
     updated = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
 

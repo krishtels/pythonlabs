@@ -50,3 +50,4 @@ class StudentForm(forms.ModelForm):
 
 
 StudentFormSet = modelformset_factory(Student, form=StudentForm, max_num=1, extra=1)
+

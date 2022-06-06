@@ -1,7 +1,8 @@
 from pyexpat.errors import messages
+
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Count, Sum, Avg
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, RedirectView, ListView
 from lab3.settings import TEACHER, STUDENT
@@ -20,7 +21,7 @@ class TeacherListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class TeacherDetailView(LoginRequiredMixin, TeacherPermissionsMixin, DetailView):
+class TeacherDetailView(LoginRequiredMixin, DetailView):
     model = Teacher
     template_name = 'people/teacher_detail.html'
 
@@ -50,18 +51,7 @@ class StudentAccountDetailView(LoginRequiredMixin, StudentPermissionsMixin, Scor
         lessons = Lesson.objects.filter(group__students=self.request.user.student.id)
         scores = Score.objects.filter(student_id=self.request.user.pk,
                                       created__in=date_period).values('id', 'lesson_id', 'score', 'created')
-        #
-        # count_scores = scores.values('score').annotate(count_score=Count('score')).order_by('-score')
-        # total_scores = count_scores.aggregate(sum_count=Sum('count_score'),
-        #                                       sum_score=Avg('score'),
-        #                                       sum_score_percent=Avg('score')*20)
-        #
-        # student_rating = {5: 0, 4: 0, 3: 0, 2: 0}
-        # for item in count_scores:
-        #     student_rating[item['score']] = item['count_score']
 
-        # context['rating'] = student_rating
-        # context['total_scores'] = total_scores
         context['date_period'] = date_period
         context['lessons'] = lessons
         context['scores_dict'] = self.create_scores_dict(date_period, scores, lessons, 'lesson_id')
@@ -128,8 +118,4 @@ class StudentUpdateView(LoginRequiredMixin, TeacherPermissionsMixin, SuccessMess
 
 class UserTypeRedirectView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        if self.request.user.user_status == STUDENT:
-            return reverse_lazy('student_account')
-
-        else:
-            return reverse_lazy('group_student_list')
+        return reverse_lazy('teacher_list')

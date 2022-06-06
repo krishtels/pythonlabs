@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('get_full_name', 'username')
     save_on_top = True
     fields = ('date_joined', 'last_login', 'username', 'password', 'email', 'user_status', 'first_name', 'last_name',
-              'birth_date', 'sex', 'photo', 'description', 'user_permissions', 'groups')
+              'birth_date', 'sex', 'photo', 'description')
     readonly_fields = ('date_joined', 'last_login')
 
     def get_image(self, obj):

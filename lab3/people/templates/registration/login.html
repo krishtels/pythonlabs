@@ -15,9 +15,10 @@
                     <p>Что то пошло не так:(</p>
                 {% endif %}
 
-                <form action="{% url 'login' %}" method="post">
+                <form action="{% url 'login' %}" method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
+                    {{ message }}
                     <input type="hidden" name="next" value="{{ next }}" />
                     <button type="submit">Вход</button>
                 </form>

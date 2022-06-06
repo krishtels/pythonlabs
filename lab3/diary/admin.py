@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lesson, Group, RatingItemStatus, Score
+from .models import Lesson, Group, Score
 
 
 @admin.register(Lesson)
@@ -10,11 +10,6 @@ class LessonAdmin(admin.ModelAdmin):
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('number', )
-
-
-@admin.register(RatingItemStatus)
-class RatingItemStatusAdmin(admin.ModelAdmin):
-    list_display = ('name',)
 
 
 @admin.register(Score)
