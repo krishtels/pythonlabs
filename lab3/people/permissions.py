@@ -1,19 +1,14 @@
-from pyexpat.errors import messages
-
-from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
 
 from lab3.settings import TEACHER, STUDENT
 from .models import Teacher
 
 
 class TeacherPermissionsMixin:
-    message = 'You are not allowed here'
-
     def dispatch(self, request, *args, **kwargs):
         if not self.has_permissions():
-            raise PermissionDenied()
+            return redirect('permission_denied')
+
         return super().dispatch(request, *args, **kwargs)
 
     def has_permissions(self):
@@ -21,17 +16,35 @@ class TeacherPermissionsMixin:
 
 
 class StudentPermissionsMixin(TeacherPermissionsMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not self.has_permissions():
+            return redirect('permission_denied')
+
+        return super().dispatch(request, *args, **kwargs)
+
     def has_permissions(self):
         return self.request.user.is_superuser or self.request.user.user_status == STUDENT
 
 
 class SuperUserPermissionsMixin(TeacherPermissionsMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not self.has_permissions():
+            return redirect('permission_denied')
+
+        return super().dispatch(request, *args, **kwargs)
+
     def has_permissions(self):
         return self.request.user.is_superuser
 
 
 class TeacherLessonPermissionsMixin(TeacherPermissionsMixin):
     message = 'You are not allowed here'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.has_permissions():
+            return redirect('permission_denied')
+
+        return super().dispatch(request, *args, **kwargs)
 
     def has_permissions(self):
         if self.request.method == 'POST':

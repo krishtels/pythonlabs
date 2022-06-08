@@ -82,7 +82,6 @@ class StudentCreateView(LoginRequiredMixin, TeacherPermissionsMixin, SuccessMess
             student.save()
             return self.form_valid(form)
         else:
-            messages.error(request, 'Ошибка сохранения !')
             return self.render_to_response({'form': form, 'student_form': student_form})
 
 
@@ -101,7 +100,6 @@ class StudentUpdateView(LoginRequiredMixin, TeacherPermissionsMixin, SuccessMess
             return super(StudentUpdateView, self).post(self.request.POST)
 
         else:
-            messages.error(request, 'Ошибка сохранения !')
             return self.render_to_response(
                 {'form': form, 'student_form': student_formset}
             )
@@ -140,7 +138,6 @@ class TeacherCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMe
             teacher.save()
             return self.form_valid(form)
         else:
-            messages.error(request, 'Ошибка сохранения !')
             return self.render_to_response({'form': form, 'teacher_form': teacher_form})
 
 
@@ -159,7 +156,6 @@ class TeacherUpdateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMe
             return super(TeacherUpdateView, self).post(self.request.POST)
 
         else:
-            messages.error(request, 'Ошибка сохранения !')
             return self.render_to_response(
                 {'form': form, 'teacher_form': teacher_formset}
             )

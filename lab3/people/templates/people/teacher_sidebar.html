@@ -1,6 +1,6 @@
 {% block sidebar %}
     <h3>Личный кабинет</h3>
-    <img class="user-avatar" src="{{ user.photo.url }}" alt="{{ user.first_name }} {{ user.last_name }}">
+    <img class="user-avatar" src="/static/{{ user.photo }}" alt="{{ user.first_name }} {{ user.last_name }}">
     <p><b>{{ user.last_name }} {{ user.first_name }} </b></p>
     <hr>
     <ul>

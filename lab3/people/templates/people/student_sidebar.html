@@ -1,6 +1,6 @@
 {% block sidebar %}
     <h3>Личный кабинет</h3>
-    <img class="user-avatar" src="{{ user.photo.url }}" alt="{{ user.get_full_name }}">
+    <img class="user-avatar" src="/static/{{ user.photo }}" alt="{{ user.get_full_name }}">
     <p><b>{{ user.get_full_name }}</b></p>
     <ul>
         <li><a href="{% url 'student_account' %}">Мои оценки</a></li>

@@ -20,7 +20,7 @@
             {% for user in user_list %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td><img class="user-avatar-mini" src="{{ user.photo.url }}" alt=""></td>
+                    <td><img class="user-avatar-mini" src="/static/{{ user.photo }}" alt=""></td>
                     <td>
                         <a href="{{ user.teacher.get_absolute_url }}">
                             {{ user.get_full_name }}

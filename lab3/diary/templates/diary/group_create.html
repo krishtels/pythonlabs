@@ -21,7 +21,7 @@
             <div>
                 {% csrf_token %}
                  <p>
-                    <label for="{{ form.number.id_for_label }}">Номер группы:</label> <br>
+                    <label for="{{ form.number.id_for_label }}">Номер группы: (6 цифр)</label> <br>
                     {{ form.number }}
                     {{ form.number.errors }}
                 </p>

@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, TemplateView
 
 from diary.forms import ScoreCreateForm, LessonCreateForm, GroupCreateForm
 from diary.models import Group, Lesson, Score
@@ -29,9 +29,9 @@ class GroupStudentDetailView(LoginRequiredMixin, TeacherPermissionsMixin, Detail
 
     def get_context_data(self, **kwargs):
         context = super(GroupStudentDetailView, self).get_context_data(**kwargs)
-        context['students'] = User.objects.select_related('student__group')\
+        context['students'] = User.objects.select_related('student__group') \
             .filter(student__group_id=self.kwargs['pk'])
-        context['teacher'] = User.objects.select_related('teacher__group_manager')\
+        context['teacher'] = User.objects.select_related('teacher__group_manager') \
             .filter(teacher__group_manager_id=self.kwargs['pk'])
         return context
 
@@ -45,7 +45,7 @@ class ScoreLessonListView(LoginRequiredMixin, TeacherLessonPermissionsMixin, Sco
         group_student = Group.objects.all()
         self.group = get_object_or_404(group_student, id=self.kwargs['group_id'])
         self.lesson = get_object_or_404(Lesson, id=self.kwargs['lesson_id'])
-        queryset = Score.objects.select_related('group', 'lesson')\
+        queryset = Score.objects.select_related('group', 'lesson') \
             .filter(group_id=self.kwargs['group_id'], lesson_id=self.kwargs['lesson_id'])
         return queryset
 
@@ -53,7 +53,7 @@ class ScoreLessonListView(LoginRequiredMixin, TeacherLessonPermissionsMixin, Sco
         context = super(ScoreLessonListView, self).get_context_data(**kwargs)
         date_period = self.create_date_period_list()
         students = User.objects.select_related('student', 'student__group').filter(student__group=self.group)
-        scores = Score.objects.select_related('group', 'lesson')\
+        scores = Score.objects.select_related('group', 'lesson') \
             .filter(created__in=date_period, lesson_id=self.lesson, group_id=self.group)
 
         context['date_period'] = date_period
@@ -94,10 +94,10 @@ class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
             created = score.created
             lesson = Lesson.objects.get(id=u[-3])
 
-            if(Score.objects.filter(
-                student=student,
-                lesson=lesson,
-                created=created
+            if (Score.objects.filter(
+                    student=student,
+                    lesson=lesson,
+                    created=created
             ).exists()):
                 score = Score.objects.get(
                     student=student,
@@ -118,7 +118,7 @@ class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
             return render(request, "diary/score_create.html", context={
                 'form': form,
                 **context
-        })
+            })
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -130,7 +130,6 @@ class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
         context['group'] = group
         context['teacher'] = teacher
         return context
-
 
 
 class LessonCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMessageMixin, CreateView):
@@ -152,7 +151,6 @@ class LessonCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMes
             group.save()
             return self.form_valid(form)
         else:
-            messages.error(request, 'Ошибка сохранения !')
             return self.render_to_response({'form': form})
 
 
@@ -168,5 +166,8 @@ class GroupCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMess
             form.save()
             return self.form_valid(form)
         else:
-            messages.error(request, 'Ошибка сохранения !')
             return self.render_to_response({'form': form})
+
+
+class PermissionView(TemplateView):
+    template_name = 'diary/permission_denied.html'

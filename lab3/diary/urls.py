@@ -1,11 +1,12 @@
 from django.urls import path, include
 
 from .views import GroupStudentListView, GroupStudentDetailView, ScoreLessonListView, AddScoreView, LessonCreateView, \
-    GroupCreateView
+    GroupCreateView, PermissionView
 
 urlpatterns = [
     path('people/', include('people.urls')),
     path('groups/', GroupStudentListView.as_view(), name='group_student_list'),
+    path('permission_denied', PermissionView.as_view(), name='permission_denied'),
     path('groups/add_group', GroupCreateView.as_view(), name='group_add'),
     path('group/<int:pk>/', GroupStudentDetailView.as_view(), name='group_student_detail'),
     path('group/add_lesson', LessonCreateView.as_view(), name='lesson_add'),

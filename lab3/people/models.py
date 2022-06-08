@@ -9,7 +9,7 @@ from lab3.settings import USER_STATUS_CHOICES, GENDER_CHOICES
 class User(AbstractUser):
     sex = models.CharField('Пол', choices=GENDER_CHOICES, max_length=1)
     birth_date = models.DateField('Дата рождения', blank=True, null=True)
-    photo = models.ImageField(upload_to='media/', default='media/default-user.png', blank=True)
+    photo = models.ImageField(default='diary/static/media/default-user.png', blank=True)
     description = models.TextField('Характеристика')
     user_status = models.CharField('Статус пользователя', choices=USER_STATUS_CHOICES, max_length=15)
     updated = models.DateField('Дата обновления', auto_now=True)
