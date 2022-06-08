@@ -17,8 +17,7 @@ class Lesson(models.Model):
 
 class Group(models.Model):
     number = models.CharField('Номер группы', max_length=6)
-    lessons = models.ManyToManyField(Lesson, related_name='group', verbose_name='Пары класса')
-    create_group = models.DateField('Дата создания группы')
+    lessons = models.ManyToManyField(Lesson, related_name='group', verbose_name='Предметы группы')
     updated = models.DateField('Дата обновления', auto_now=True)
     created = models.DateField('Дата создания', auto_now_add=True)
 

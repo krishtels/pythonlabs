@@ -7,10 +7,10 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, RedirectView, ListView
 from lab3.settings import TEACHER, STUDENT
 from .models import Teacher, User, Student
-from .permissions import TeacherPermissionsMixin, StudentPermissionsMixin
+from .permissions import TeacherPermissionsMixin, StudentPermissionsMixin, SuperUserPermissionsMixin
 from diary.permissions import ScoreJournalMixin
 from diary.models import Lesson, Score
-from .forms import UserCreateForm, UserUpdateForm, StudentForm, StudentFormSet
+from .forms import UserCreateForm, UserUpdateForm, StudentForm, StudentFormSet, TeacherForm, TeacherFormSet
 
 
 class TeacherListView(LoginRequiredMixin, ListView):
@@ -19,6 +19,7 @@ class TeacherListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = User.objects.select_related('teacher__group_manager').filter(user_status=TEACHER)
         return queryset
+
 
 
 class TeacherDetailView(LoginRequiredMixin, DetailView):
@@ -114,6 +115,64 @@ class StudentUpdateView(LoginRequiredMixin, TeacherPermissionsMixin, SuccessMess
 
     def get_success_url(self):
         return reverse_lazy('student_update', kwargs={'pk': self.kwargs['pk']})
+
+
+class TeacherCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMessageMixin, CreateView):
+    form_class = UserCreateForm
+    template_name = 'people/teacher_create.html'
+    success_url = reverse_lazy('teacher_add')
+    success_message = 'Преподаватель успешно добавлен.'
+
+    def get_context_data(self, **kwargs):
+        data = super(TeacherCreateView, self).get_context_data(**kwargs)
+        data['teacher_form'] = TeacherForm()
+        return data
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        teacher_form = TeacherForm(self.request.POST)
+        if form.is_valid() and teacher_form.is_valid():
+            user = form.save(commit=False)
+            user.user_status = TEACHER
+            teacher = teacher_form.save(commit=False)
+            teacher.user = user
+            user.save()
+            teacher.save()
+            return self.form_valid(form)
+        else:
+            messages.error(request, 'Ошибка сохранения !')
+            return self.render_to_response({'form': form, 'teacher_form': teacher_form})
+
+
+class TeacherUpdateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMessageMixin, UpdateView):
+    model = User
+    queryset = User.objects.filter(user_status=TEACHER)
+    form_class = UserUpdateForm
+    template_name = 'people/teacher_update.html'
+    success_message = 'Данные преподавателя успешно обновлены.'
+
+    def post(self, request, *args, **kwargs):
+        form = UserUpdateForm(self.request.POST)
+        teacher_formset = TeacherFormSet(self.request.POST, prefix='teacher')
+        if teacher_formset.is_valid():
+            teacher_formset.save()
+            return super(TeacherUpdateView, self).post(self.request.POST)
+
+        else:
+            messages.error(request, 'Ошибка сохранения !')
+            return self.render_to_response(
+                {'form': form, 'teacher_form': teacher_formset}
+            )
+
+    def get_context_data(self, **kwargs):
+        data = super(TeacherUpdateView, self).get_context_data(**kwargs)
+        teacher_formset = TeacherFormSet(queryset=Teacher.objects.filter(user_id=self.kwargs['pk']), prefix='teacher')
+
+        data['teacher_form'] = teacher_formset
+        return data
+
+    def get_success_url(self):
+        return reverse_lazy('teacher_update', kwargs={'pk': self.kwargs['pk']})
 
 
 class UserTypeRedirectView(LoginRequiredMixin, RedirectView):

@@ -1,8 +1,8 @@
 from django import forms
 
-from lab3.settings import STUDENT
-from .models import Score
-from people.models import User
+from lab3.settings import STUDENT, TEACHER
+from .models import Score, Lesson, Group
+from people.models import User, Teacher
 
 
 class ScoreCreateForm(forms.ModelForm):
@@ -19,3 +19,23 @@ class ScoreCreateForm(forms.ModelForm):
     class Meta:
         model = Score
         fields = ['student', 'created', 'score']
+
+
+class LessonCreateForm(forms.ModelForm):
+    class Meta:
+        model = Lesson
+        fields = ['name']
+        widgets = {
+               'name': forms.TextInput(attrs={'placeholder': 'Название предмета'}),
+               }
+
+
+class GroupCreateForm(forms.ModelForm):
+    lessons = forms.ModelMultipleChoiceField(queryset=Lesson.objects.all(), to_field_name='name')
+
+    class Meta:
+        model = Group
+        fields = ['number', 'lessons']
+        widgets = {
+               'number': forms.TextInput(attrs={'placeholder': 'Введите номер группы'}),
+               }

@@ -1,7 +1,8 @@
 from django import forms
 from django.forms import modelformset_factory
 
-from .models import Student, User
+from diary.models import Group, Lesson
+from .models import Student, User, Teacher
 
 
 class UserCreateForm(forms.ModelForm):
@@ -49,5 +50,16 @@ class StudentForm(forms.ModelForm):
         widgets = {'group': forms.Select()}
 
 
-StudentFormSet = modelformset_factory(Student, form=StudentForm, max_num=1, extra=1)
+class TeacherForm(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        group_manager = forms.ModelChoiceField(queryset=Group.objects.all(), to_field_name='number')
+        lessons = forms.ModelMultipleChoiceField(queryset=Lesson.objects.all(), to_field_name='name')
+        fields = ('group_manager', 'position', 'lessons')
+        widgets = {
+                   'position': forms.TextInput(attrs={'placeholder': 'Должность'}),
+                   }
 
+
+StudentFormSet = modelformset_factory(Student, form=StudentForm, max_num=1, extra=1)
+TeacherFormSet = modelformset_factory(Teacher, form=TeacherForm, max_num=1, extra=1)

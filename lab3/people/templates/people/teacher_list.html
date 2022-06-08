@@ -4,6 +4,7 @@
 
 {% block content %}
     <h1>Преподаватели</h1>
+    <a class="btn btn-success" href="{% url 'teacher_add' %}">+ Добавить преподавателя</a>
     <table class="table-journal">
         <thead>
             <tr>
@@ -12,6 +13,7 @@
                 <th>ФИО</th>
                 <th>Должность</th>
                 <th>Куратор</th>
+                <th>Редактировать</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +29,9 @@
                     <td>{{ user.teacher.position }}</td>
                     <td>
                         <a href="{{ user.teacher.group_manager.get_absolute_url }}">{{ user.teacher.group_manager }}</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-dark" href="{% url 'teacher_update' user.id %}">Редактировать</a>
                     </td>
                 </tr>
             {% endfor %}

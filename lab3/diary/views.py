@@ -1,24 +1,25 @@
+from pyexpat.errors import messages
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, CreateView
 
-from diary.forms import ScoreCreateForm
+from diary.forms import ScoreCreateForm, LessonCreateForm, GroupCreateForm
 from diary.models import Group, Lesson, Score
 from diary.permissions import ScoreJournalMixin
-from lab3.settings import TEACHER
 from people.models import User, Teacher
-from people.permissions import TeacherPermissionsMixin, TeacherLessonPermissionsMixin
+from people.permissions import TeacherPermissionsMixin, TeacherLessonPermissionsMixin, SuperUserPermissionsMixin
 from django.shortcuts import get_object_or_404, render, redirect
 
 
 class GroupStudentListView(LoginRequiredMixin, TeacherPermissionsMixin, ListView):
     template_name = 'diary/group_list.html'
-    context_object_name = 'users_teachers'
+    context_object_name = 'groups'
 
     def get_queryset(self):
-        queryset = User.objects.select_related('teacher__group_manager').filter(user_status=TEACHER)
-        return queryset
+        return Group.objects.all()
 
 
 class GroupStudentDetailView(LoginRequiredMixin, TeacherPermissionsMixin, DetailView):
@@ -30,6 +31,8 @@ class GroupStudentDetailView(LoginRequiredMixin, TeacherPermissionsMixin, Detail
         context = super(GroupStudentDetailView, self).get_context_data(**kwargs)
         context['students'] = User.objects.select_related('student__group')\
             .filter(student__group_id=self.kwargs['pk'])
+        context['teacher'] = User.objects.select_related('teacher__group_manager')\
+            .filter(teacher__group_manager_id=self.kwargs['pk'])
         return context
 
 
@@ -87,18 +90,27 @@ class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
         if form.is_valid():
             score = form.save(commit=False)
             mark = score.score
+            student = score.student
+            created = score.created
+            lesson = Lesson.objects.get(id=u[-3])
 
-            score = Score.objects.get_or_create(
-                student=score.student,
-                lesson=Lesson.objects.get(id=u[-3]),
-                created=score.created
-            )[0]
+            if(Score.objects.filter(
+                student=student,
+                lesson=lesson,
+                created=created
+            ).exists()):
+                score = Score.objects.get(
+                    student=student,
+                    lesson=lesson,
+                    created=created
+                )
+            score.score = mark
+            score.lesson = lesson
             score.group = Group.objects.get(id=u[-4])
             score.teacher = User.objects.get(id=request.user.id)
-            score.score = mark
             score.save()
 
-            return redirect(reverse_lazy("score_lesson", kwargs={
+            return redirect(reverse_lazy('score_lesson', kwargs={
                 'group_id': score.group.pk,
                 'lesson_id': score.lesson.pk
             }))
@@ -119,3 +131,42 @@ class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
         context['teacher'] = teacher
         return context
 
+
+
+class LessonCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMessageMixin, CreateView):
+    form_class = LessonCreateForm
+    template_name = 'diary/lesson_create.html'
+    success_url = reverse_lazy('lesson_add')
+    success_message = 'Предмет успешно добавлен.'
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            lesson_name = form.save(commit=False).name
+            lesson = Lesson.objects.get_or_create(
+                name=lesson_name
+            )[0]
+            group = Group.objects.get(id=self.request.user.pk)
+            group.lessons.add(lesson)
+            lesson.save()
+            group.save()
+            return self.form_valid(form)
+        else:
+            messages.error(request, 'Ошибка сохранения !')
+            return self.render_to_response({'form': form})
+
+
+class GroupCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMessageMixin, CreateView):
+    form_class = GroupCreateForm
+    template_name = 'diary/group_create.html'
+    success_url = reverse_lazy('group_add')
+    success_message = 'Группа успешно создана.'
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            messages.error(request, 'Ошибка сохранения !')
+            return self.render_to_response({'form': form})

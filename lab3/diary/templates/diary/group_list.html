@@ -4,24 +4,23 @@
 
 {% block content %}
     <h1>Список журналов по учебным группам</h1>
+    <a class="btn btn-success" href="{% url 'group_add' %}">+ Добавить группу</a>
     <table class="table-journal">
         <thead>
             <tr>
                 <th>№</th>
                 <th>Группа</th>
-                <th>Куратор</th>
             </tr>
         </thead>
         <tbody>
-            {% for user in users_teachers %}
+            {% for group in groups %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>
-                        <a href="{{ user.teacher.group_manager.get_absolute_url }}">
-                            {{ user.teacher.group_manager }}
+                        <a href="{{ group.get_absolute_url }}">
+                            {{ group }}
                         </a>
                     </td>
-                    <td><a href="{{ user.teacher.get_absolute_url }}">{{ user.get_full_name }}</a></td>
                 </tr>
             {% endfor %}
         </tbody>

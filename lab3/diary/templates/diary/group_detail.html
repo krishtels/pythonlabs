@@ -4,8 +4,12 @@
 
 {% block content %}
     <h1>Журнал группы - {{ group }}</h1>
-
+    <h2>Куратор группы:
+    {% for teach in teacher %}
+        <a href="{{ teach.teacher.get_absolute_url }}">{{ teach.get_full_name }}</a>
+    {% endfor %}</h2>
     <h2>Предметы группы {{ group }}</h2>
+    <a class="btn btn-success" href="{% url 'lesson_add' %}">+ Добавить предмет</a>
     <table class="table-journal">
         <thead>
             <tr>

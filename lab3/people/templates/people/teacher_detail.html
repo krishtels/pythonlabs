@@ -13,7 +13,11 @@
             <h3>{{ user.last_name }} {{ user.first_name }} </h3>
             <p><i><u>Дата рождения:</u></i> {{ user.birth_date|date:"d.m.Y" }}</p>
             <p><i><u>Должность:</u></i> {{ user.teacher.position }} </p>
-
+            <p><i><u>Ведет предметы:</u></i>
+                {% for lesson in user.teacherlessons %}
+                    {{ lesson.name }}
+                {% endfor %}
+            </p>
             <p><i><u>Курирует группу:</u></i> {{ user.teacher.group_manager }}</p>
             <span class="small-font">Характеристика</span><hr>
             <p>{{ user.description }}</p>

@@ -20,31 +20,26 @@
 
     <form action="" method="post" enctype="multipart/form-data">
         <div class="create-form">
-{#            {% csrf_token %}#}
+
             <div>
                 {% csrf_token %}
-{#                <p>#}
-{#                    {{ form.student }}#}
-{#                    {{ form.student.errors }}#}
-{#                </p>#}
-{##}
-{#                <p>#}
-{#                    {{ form.lesson }}#}
-{#                    {{ form.lesson.errors }}#}
-{#                </p>#}
-{##}
-{#                <p>#}
-{#                    <label for="{{ form.birth_date.id_for_label }}">Дата занятия:</label> <br>#}
-{#                    {{ form.created }}#}
-{#                    {{ form.created.errors }}#}
-{#                </p>#}
-{##}
-{#                 <p>#}
-{#                    <label for="{{ form.score.id_for_label }}">Оценка:</label> <br>#}
-{#                    {{ form.score }}#}
-{#                    {{ form.score.errors }}#}
-{#                </p>#}
-                {{ form.as_p }}
+                <p>
+                    <label for="{{ form.birth_date.id_for_label }}">Студент:</label> <br>
+                    {{ form.student }}
+                    {{ form.student.errors }}
+                </p>
+
+                <p>
+                    <label for="{{ form.birth_date.id_for_label }}">Дата занятия:</label> <br>
+                    {{ form.created }}
+                    {{ form.created.errors }}
+                </p>
+
+                 <p>
+                    <label for="{{ form.score.id_for_label }}">Оценка:</label> <br>
+                    {{ form.score }}
+                    {{ form.score.errors }}
+                </p>
             </div>
 
 
