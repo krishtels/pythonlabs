@@ -1,4 +1,4 @@
-from pyexpat.errors import messages
+import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -14,11 +14,15 @@ from people.permissions import TeacherPermissionsMixin, TeacherLessonPermissions
 from django.shortcuts import get_object_or_404, render, redirect
 
 
+logger = logging.getLogger('main')
+
+
 class GroupStudentListView(LoginRequiredMixin, TeacherPermissionsMixin, ListView):
     template_name = 'diary/group_list.html'
     context_object_name = 'groups'
 
     def get_queryset(self):
+        logger.info('Showing list of groups')
         return Group.objects.all()
 
 
@@ -28,6 +32,7 @@ class GroupStudentDetailView(LoginRequiredMixin, TeacherPermissionsMixin, Detail
     context_object_name = 'group'
 
     def get_context_data(self, **kwargs):
+        logger.info('Showing list of students in the group')
         context = super(GroupStudentDetailView, self).get_context_data(**kwargs)
         context['students'] = User.objects.select_related('student__group') \
             .filter(student__group_id=self.kwargs['pk'])
@@ -42,6 +47,7 @@ class ScoreLessonListView(LoginRequiredMixin, TeacherLessonPermissionsMixin, Sco
     permission_denied_message = 'В доступе отказанно'
 
     def get_queryset(self):
+        logger.info('Showing list of scores')
         group_student = Group.objects.all()
         self.group = get_object_or_404(group_student, id=self.kwargs['group_id'])
         self.lesson = get_object_or_404(Lesson, id=self.kwargs['lesson_id'])
@@ -88,6 +94,8 @@ class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
         context = self.get_context_data(**kwargs)
 
         if form.is_valid():
+            logger.info('Score was added successfully.')
+
             score = form.save(commit=False)
             mark = score.score
             student = score.student
@@ -115,6 +123,8 @@ class AddScoreView(LoginRequiredMixin, TeacherPermissionsMixin, View):
                 'lesson_id': score.lesson.pk
             }))
         else:
+            logger.info('Form was incorrectly filled')
+
             return render(request, "diary/score_create.html", context={
                 'form': form,
                 **context
@@ -141,6 +151,8 @@ class LessonCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMes
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
+            logger.info('Lesson was added')
+
             lesson_name = form.save(commit=False).name
             lesson = Lesson.objects.get_or_create(
                 name=lesson_name
@@ -150,7 +162,9 @@ class LessonCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMes
             lesson.save()
             group.save()
             return self.form_valid(form)
+
         else:
+            logger.info('Lesson form wasnt filled correctly')
             return self.render_to_response({'form': form})
 
 
@@ -163,9 +177,11 @@ class GroupCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMess
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
+            logger.info('Group was added')
             form.save()
             return self.form_valid(form)
         else:
+            logger.info('Group form wasnt filled correctly')
             return self.render_to_response({'form': form})
 
 

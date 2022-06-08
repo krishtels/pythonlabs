@@ -1,9 +1,13 @@
 import datetime
+import logging
+
+logger = logging.getLogger('main')
 
 
 class ScoreJournalMixin:
     def create_date_period_list(self):
         day_delta = datetime.timedelta(days=1)
+        logger.info('Date period created')
         try:
             start_date = datetime.datetime.strptime(self.request.GET.get('start-date'), '%Y-%m-%d').date()
             end_date = datetime.datetime.strptime(self.request.GET.get('end-date'), '%Y-%m-%d').date()
@@ -24,4 +28,5 @@ class ScoreJournalMixin:
                         if obj.id == score[grouping_object_name] and date == score['created']:
                             scores_dict[date][obj.id] = (score['score'], score['id'])
                             break
+        logger.info('Score dict created')
         return scores_dict

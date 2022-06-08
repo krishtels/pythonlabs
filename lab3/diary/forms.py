@@ -1,9 +1,9 @@
 from django import forms
 from django.core import validators
 
-from lab3.settings import STUDENT, TEACHER
+from lab3.settings import STUDENT
 from .models import Score, Lesson, Group
-from people.models import User, Teacher
+from people.models import User
 
 
 class ScoreCreateForm(forms.ModelForm):

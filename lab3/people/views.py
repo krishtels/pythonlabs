@@ -1,5 +1,4 @@
-from pyexpat.errors import messages
-
+import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -13,13 +12,16 @@ from diary.models import Lesson, Score
 from .forms import UserCreateForm, UserUpdateForm, StudentForm, StudentFormSet, TeacherForm, TeacherFormSet
 
 
+logger = logging.getLogger('main')
+
+
 class TeacherListView(LoginRequiredMixin, ListView):
     template_name = 'people/teacher_list.html'
 
     def get_queryset(self):
+        logger.info('Showing list of teachers')
         queryset = User.objects.select_related('teacher__group_manager').filter(user_status=TEACHER)
         return queryset
-
 
 
 class TeacherDetailView(LoginRequiredMixin, DetailView):
@@ -27,6 +29,7 @@ class TeacherDetailView(LoginRequiredMixin, DetailView):
     template_name = 'people/teacher_detail.html'
 
     def get_queryset(self):
+        logger.info('Showing teacher info')
         queryset = User.objects.select_related('teacher__group_manager').filter(user_status=TEACHER)
         return queryset
 
@@ -35,6 +38,7 @@ class StudentDetailView(LoginRequiredMixin, TeacherPermissionsMixin, DetailView)
     template_name = 'people/student_detail.html'
 
     def get_queryset(self):
+        logger.info('Showing student info')
         queryset = User.objects.select_related('student__group').filter(user_status=STUDENT)
         return queryset
 
@@ -44,6 +48,7 @@ class StudentAccountDetailView(LoginRequiredMixin, StudentPermissionsMixin, Scor
     context_object_name = 'student'
 
     def get_object(self, queryset=None):
+        logger.info('Showing student account')
         return User.objects.select_related('student').get(pk=self.request.user.pk)
 
     def get_context_data(self, **kwargs):
@@ -74,6 +79,7 @@ class StudentCreateView(LoginRequiredMixin, TeacherPermissionsMixin, SuccessMess
         form = self.get_form()
         student_form = StudentForm(self.request.POST)
         if form.is_valid() and student_form.is_valid():
+            logger.info('New student created')
             user = form.save(commit=False)
             user.user_status = STUDENT
             student = student_form.save(commit=False)
@@ -82,6 +88,7 @@ class StudentCreateView(LoginRequiredMixin, TeacherPermissionsMixin, SuccessMess
             student.save()
             return self.form_valid(form)
         else:
+            logger.info('Student created form was fill incorrectly')
             return self.render_to_response({'form': form, 'student_form': student_form})
 
 
@@ -96,10 +103,12 @@ class StudentUpdateView(LoginRequiredMixin, TeacherPermissionsMixin, SuccessMess
         form = UserUpdateForm(self.request.POST)
         student_formset = StudentFormSet(self.request.POST, prefix='student')
         if student_formset.is_valid():
+            logger.info('Student info was updated')
             student_formset.save()
             return super(StudentUpdateView, self).post(self.request.POST)
 
         else:
+            logger.info('Updating student form was filled incorrectly')
             return self.render_to_response(
                 {'form': form, 'student_form': student_formset}
             )
@@ -130,6 +139,7 @@ class TeacherCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMe
         form = self.get_form()
         teacher_form = TeacherForm(self.request.POST)
         if form.is_valid() and teacher_form.is_valid():
+            logger.info('New Teacher was created')
             user = form.save(commit=False)
             user.user_status = TEACHER
             teacher = teacher_form.save(commit=False)
@@ -138,6 +148,7 @@ class TeacherCreateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMe
             teacher.save()
             return self.form_valid(form)
         else:
+            logger.info('Creating teacher form was filled incorrectly')
             return self.render_to_response({'form': form, 'teacher_form': teacher_form})
 
 
@@ -152,10 +163,12 @@ class TeacherUpdateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMe
         form = UserUpdateForm(self.request.POST)
         teacher_formset = TeacherFormSet(self.request.POST, prefix='teacher')
         if teacher_formset.is_valid():
+            logger.info('Teacher info was updated')
             teacher_formset.save()
             return super(TeacherUpdateView, self).post(self.request.POST)
 
         else:
+            logger.info('Updating teacher form was filled incorrectly')
             return self.render_to_response(
                 {'form': form, 'teacher_form': teacher_formset}
             )
@@ -172,5 +185,7 @@ class TeacherUpdateView(LoginRequiredMixin, SuperUserPermissionsMixin, SuccessMe
 
 
 class UserTypeRedirectView(LoginRequiredMixin, RedirectView):
+
     def get_redirect_url(self, *args, **kwargs):
+        logger.info('User was redirected')
         return reverse_lazy('teacher_list')
