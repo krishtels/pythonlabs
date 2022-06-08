@@ -12,7 +12,7 @@ logger = logging.getLogger('main')
 class TeacherPermissionsMixin:
     def dispatch(self, request, *args, **kwargs):
         if not self.has_permissions():
-            logger.info('User tried to get access to the page he cant use')
+            logger.warning('User tried to get access to the page he cant use')
             return redirect('permission_denied')
 
         return super().dispatch(request, *args, **kwargs)
@@ -24,7 +24,7 @@ class TeacherPermissionsMixin:
 class StudentPermissionsMixin(TeacherPermissionsMixin):
     def dispatch(self, request, *args, **kwargs):
         if not self.has_permissions():
-            logger.info('User tried to get access to the page he cant use')
+            logger.warning('User tried to get access to the page he cant use')
             return redirect('permission_denied')
 
         return super().dispatch(request, *args, **kwargs)
@@ -36,7 +36,7 @@ class StudentPermissionsMixin(TeacherPermissionsMixin):
 class SuperUserPermissionsMixin(TeacherPermissionsMixin):
     def dispatch(self, request, *args, **kwargs):
         if not self.has_permissions():
-            logger.info('User tried to get access to the page he cant use')
+            logger.warning('User tried to get access to the page he cant use')
             return redirect('permission_denied')
 
         return super().dispatch(request, *args, **kwargs)
@@ -50,7 +50,7 @@ class TeacherLessonPermissionsMixin(TeacherPermissionsMixin):
 
     def dispatch(self, request, *args, **kwargs):
         if not self.has_permissions():
-            logger.info('User tried to get access to the page he cant use')
+            logger.warning('User tried to get access to the page he cant use')
             return redirect('permission_denied')
 
         return super().dispatch(request, *args, **kwargs)

@@ -28,6 +28,7 @@ urlpatterns = [
     path('', UserTypeRedirectView.as_view(), name='user_type'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('mailing/', include('mailing.urls')),
 ]
 
 if settings.DEBUG:
