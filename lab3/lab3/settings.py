@@ -59,6 +59,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'lab3.urls'
 
+CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
