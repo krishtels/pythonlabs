@@ -31,7 +31,7 @@ DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 if os.environ.get("DJANGO_ALLOWED_HOSTS"):
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 else:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['https://lab3journal.herokuapp.com']
 
 # Application definition
 
