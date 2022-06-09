@@ -34,6 +34,9 @@ else:
     ALLOWED_HOSTS = []
 
 # Application definition
+CSRF_TRUSTED_ORIGINS = [
+    'https://lab3journal.herokuapp.com'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
