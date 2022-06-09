@@ -31,7 +31,7 @@ DEBUG = True
 if os.environ.get("DJANGO_ALLOWED_HOSTS"):
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 else:
-    ALLOWED_HOSTS = ['https://lab3journal.herokuapp.com/',]
+    ALLOWED_HOSTS = ['https://lab3journal.herokuapp.com/']
 
 # Application definition
 
@@ -55,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.csrf.CsrfViewMiddlewar',
 ]
 
 ROOT_URLCONF = 'lab3.urls'
